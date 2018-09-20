@@ -1,0 +1,67 @@
+*{
+  text-align: center;
+}
+
+h6,h5,h4,h3,h2,h1, a{
+  margin: 10px;
+  background:white;
+}
+
+#card{
+  width:30%;
+  height:500px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid black;
+  display: block;
+
+  border-radius: 6px;
+}
+
+#card-text{
+  position: relative;
+  z-index: 10;
+  height: 250px;
+}
+
+#image{
+  display: none;
+}
+
+#image-div{
+  position:relative;
+  display:block;
+  position: inline block;
+  height: 48%;
+  border-radius: 4%;
+}
+
+#link{
+  font-size: 20px;
+  width: 100%;
+  background-color:white;
+}
+
+#link-wrapper{
+  width:97%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  position:relative;
+  background-color:white;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+
+#name{
+  border-bottom: 2px solid grey;
+  border-radius: 6px;
+}
+
+#input-box{
+  margin: 30px;
+  border-radius: 2px;
+  box-shadow: none;
+  border: 1px solid grey;
+}

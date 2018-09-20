@@ -1,5 +1,5 @@
 import React from 'react';
-
+import UserInputBox from './input_box';
 
 process.on('unhandledRejection', error => {
   console.log('unhandledRejection', error.message);
@@ -12,12 +12,16 @@ function pick_random(array){
 class Card extends React.Component{
   constructor(props){
     super(props);
-    this.state = {current_venue : null, error : null};
+    this.state = {current_venue : null, error : null, previous_location : null};
 
     this.new_venue = this.new_venue.bind(this);
     this.venue_caller = this.venue_caller.bind(this);
-
+    this.set_previous_location = this.set_previous_location.bind(this);
     this.venue_caller();
+  }
+
+  set_previous_location(location){
+    this.setState({previous_location : location });
   }
 
   new_venue(query, location){
@@ -36,12 +40,9 @@ class Card extends React.Component{
             this.setState({current_venue : venue});
           }
         }).catch(err => {
-
           console.log(err);
           this.setState({error : err})
-
         })
-
   }
 
   venue_caller(){
@@ -50,8 +51,6 @@ class Card extends React.Component{
 
     this.new_venue(chosen_term, '77079')
   }
-
-
 
   format_categories(cat_array){
     var formatted_cat_array = [];
@@ -74,15 +73,15 @@ class Card extends React.Component{
           <div class='wrapper'>
             <h1>Whoops! We couldn't retrieve the data from the server!</h1>
             <h2>Please try again in a moment!</h2>
-            <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue}></UserInputBox>
+            <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
           </div>
         )
       }else{
         return(
           <div class='wrapper'>
             <h1>{this.state.error.name}</h1>
-            <h1>Invalid Location. A typo perhaps?</h1>
-            <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue}></UserInputBox>
+            <h1>Error. Try again?</h1>
+            <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
           </div>
         )
       }
@@ -99,19 +98,24 @@ class Card extends React.Component{
       for(var i in cur.location.display_address){
         formatted_address.push(cur.location.display_address[i] + ' ');
       }
+
+
       return(
         <div className="wrapper">
-          <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue}></UserInputBox>
+          <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
           <div id='card'>
-            <div id='textbox'>
-              <h1 id='name'>{cur.name}</h1>
-              <h2 id='categories'>Categories: {this.format_categories(cur.categories)}</h2>
-              <h2 id='rating'>Rating: {cur.rating} / 5</h2>
-              <h2 id='price'>Price: {cur.price}</h2>
-              <h2 id='address'>{formatted_address}</h2>
-              <h2 id='link'><a href={cur.url} target='_blank' textDecoration='none'>Website</a></h2>
-              <h2><img id='image' height="400" width="400" src={cur.image_url} /></h2>
+            <div id='card-text'>
+              <h2 id='name'>{cur.name}</h2>
+              <h3 id='categories'>Categories: {this.format_categories(cur.categories)}</h3>
+              <h3 id='rating'>Rating: {cur.rating} / 5</h3>
+              <h3 id='price'>Price: {cur.price}</h3>
+              <h3 id='address'>{formatted_address}</h3>
+              <h3 id='link-wrapper'><a id='link' href={cur.url} target='_blank' textDecoration='none'>Website</a></h3>
             </div>
+            <div id="image-div" style={{backgroundImage : 'url(' + cur.image_url + ')', backgroundSize: "100%"}}>
+
+            </div>
+
           </div>
         </div>
       )
@@ -121,7 +125,7 @@ class Card extends React.Component{
         <div className="wrapper">
           <h1 className="header">Invalid Location. A typo perhaps?</h1>
           <h2 className="subheader">Try again with a slightly different search term!</h2>
-          <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue}></UserInputBox>
+          <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue} setPrevLoc={this.set_previous_location}></UserInputBox>
         </div>
       )
     }
@@ -130,48 +134,6 @@ class Card extends React.Component{
 }
 
 
-class UserInputBox extends React.Component{
-  constructor(props){
-    super(props);
-    this.venue_caller = this.props.venueCaller.bind(this);
-    this.new_venue = this.props.newVenue.bind(this);
-    this.handle_change = this.handle_change.bind(this);
-    this.handle_submit = this.handle_submit.bind(this);
-
-
-    this.state = {text : ''};
-  }
-
-  handle_change(e){
-    this.setState({text : e.target.value})
-  }
-
-  handle_submit(){
-    var search_terms = ['restaraunt','diner', 'lunch', 'park', 'dessert', 'coffee', 'date', 'romantic', 'fun', 'date', 'movie'];
-    var chosen_term = pick_random(search_terms);
-
-    if(this.state.text.trim() == ''){
-      var location = '77079'
-    }else{
-      var location = this.state.text
-    }
-
-    this.setState({text : ''})
-
-    this.new_venue(chosen_term, location);
-  }
-
-  render(){
-    return(
-      <div id='user-input-box'>
-        <h2>
-          <input name='location' type='text' placeholder='Enter an address or Zip Code' onChange={this.handle_change}></input>
-          <button id='new-venue-btn'onClick={this.handle_submit} className='btn btn-lg btn-primary'>New Venue</button>
-        </h2>
-      </div>
-    )
-  }
-}
 
 
 export default Card;
