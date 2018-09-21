@@ -16,6 +16,15 @@ h6,h5,h4,h3,h2,h1, a{
   display: block;
 
   border-radius: 6px;
+
+  opacity: 1;
+  transition: opacity 200ms 0ms;
+
+}
+
+#card.hide{
+  transition: opacity 200ms 0ms;
+  opacity: 0.0
 }
 
 #card-text{

@@ -7,35 +7,23 @@ const PORT = '3232';
 
 const yelp = require('yelp-fusion');
 const API_KEY = "fFoHEGbf5qO3BdOMbgSY174VNDVnntD3kiyiznj5tUnCpTLvQICJwcfKqKbuHm9yaJRjP0hs2K73gHO1es1X3faeCtFc80fWZ6NwnDV9R2FeGN5qq5jI8Ku1EjydW3Yx";
-
 const client = yelp.client(API_KEY);
 
-/*
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "Host");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-*/
 
-app.get("/search/:term/:location", function(req, res){
-  var term = req.params.term;
+app.get("/search/:search_term/:location", function(req, res){
+  var search_term = req.params.search_term;
   var location = req.params.location;
 
-  var query = {term:term, location:location};
+  var query = {term:search_term, location:location};
 
-  try{
-    client.search(query).then(response => {
-      var businesses = response.jsonBody.businesses;
+  client.search(query).then(response => {
 
-      res.json(businesses);
-    }).catch(error => {
-      res.json(error)
-    })
-  }catch(error){
-    throw 'api_exception'
-  }
+    var venues = response.jsonBody.businesses;
+    res.json(venues);
 
+  }).catch(error => {
+    res.json(error);
+  })
 })
 
 app.listen(PORT, () => console.log("Server Located on Port " + PORT));

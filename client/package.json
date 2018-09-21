@@ -17,5 +17,9 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:3232/"
+  "proxy": "http://localhost:3232/",
+  "devDependencies": {
+    "eslint": "^5.6.0",
+    "eslint-config-google": "^0.10.0"
+  }
 }

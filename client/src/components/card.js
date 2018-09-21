@@ -1,12 +1,9 @@
 import React from 'react';
+
 import UserInputBox from './input_box';
 
-process.on('unhandledRejection', error => {
-  console.log('unhandledRejection', error.message);
-});
-
 function pick_random(array){
-  return array[Math.round(Math.random() * array.length-1)]
+  return array[Math.round(Math.random() * array.length)]
 }
 
 class Card extends React.Component{
@@ -14,95 +11,95 @@ class Card extends React.Component{
     super(props);
     this.state = {current_venue : null, error : null, previous_location : null};
 
-    this.new_venue = this.new_venue.bind(this);
-    this.venue_caller = this.venue_caller.bind(this);
+    this.change_current_venue = this.change_current_venue.bind(this);
     this.set_previous_location = this.set_previous_location.bind(this);
-    this.venue_caller();
+
+    this.change_current_venue()
   }
 
   set_previous_location(location){
     this.setState({previous_location : location });
   }
 
-  new_venue(query, location){
-
+  change_current_venue (search_term, location){
     this.setState({current_venue : null, error : null})
+    var query = 'search/' + search_term + '/' + location;
 
-
-      var constructed_query = 'search/' + query + '/' + location;
-
-
-        fetch(constructed_query).then(response => response.json()).then(response => {
-          if(response.body != undefined){
-            this.setState({error : true})
-          }else{
-            var venue = pick_random(response);
-            this.setState({current_venue : venue});
-          }
-        }).catch(err => {
-          console.log(err);
-          this.setState({error : err})
-        })
+    fetch(query).then(response => response.json()).then(response => {
+      if(response.body != undefined){ // Only errors respond with a body
+        this.setState({error : response.body});
+      }else{
+        var venue = pick_random(response);
+        this.setState({current_venue : venue});
+      }
+    }).catch(err => {
+      console.log(err);
+      this.setState({error : err})
+    })
   }
 
-  venue_caller(){
-    var search_terms = ['restaraunt','diner', 'lunch', 'park', 'dessert', 'coffee', 'date', 'romantic', 'fun', 'date'];
-    var chosen_term = pick_random(search_terms);
+  format_categories(categories_array){
+    var formatted_categories_array = [];
 
-    this.new_venue(chosen_term, '77079')
-  }
-
-  format_categories(cat_array){
-    var formatted_cat_array = [];
-    for(var i in cat_array){
-      formatted_cat_array.push(cat_array[i].title + ', ');
+    // Formats array of categories into a string, with each element seperated by comma
+    for(var i in categories_array){
+      formatted_categories_array.push(categories_array[i].title + ', ');
     }
 
-    formatted_cat_array[formatted_cat_array.length - 1] = formatted_cat_array[formatted_cat_array.length - 1 ].slice(0, -2);
+    // Removes comma from the last element of the string
+    formatted_categories_array[formatted_categories_array.length - 1] = formatted_categories_array[formatted_categories_array.length - 1 ].slice(0, -2);
 
-    return formatted_cat_array;
+    return formatted_categories_array;
+  }
+
+  format_address(address){
+    var formatted_address = [];
+    for(var i in address){
+      formatted_address.push(address[i] + ' ');
+    }
+    return formatted_address;
   }
 
   render(){
     var cur = this.state.current_venue;
 
     if(this.state.error != null){
-      console.log(this.state.error);
-      if(this.state.error.name == 'SyntaxError'){
+      if(this.state.error.name == 'SyntaxError'){ // SyntaxError because response isn't in proper JSON format
         return(
           <div class='wrapper'>
             <h1>Whoops! We couldn't retrieve the data from the server!</h1>
             <h2>Please try again in a moment!</h2>
-            <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
+            <UserInputBox venueCaller={this.venue_caller} newVenue={this.change_current_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
           </div>
         )
-      }else{
+      }else{ // Generic Error Handling
         return(
           <div class='wrapper'>
             <h1>{this.state.error.name}</h1>
             <h1>Error. Try again?</h1>
-            <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
+            <UserInputBox venueCaller={this.venue_caller} newVenue={this.change_current_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
           </div>
         )
       }
 
-    }else if(this.state.current_venue === null){
+    }else if(this.state.current_venue === null){ // Shown before API request is finished
       return(
         <div className="wrapper">
           <h1 className='header'>Loading...</h1>
         </div>
       )
 
-    }else if(this.state.current_venue != null){
-      var formatted_address = [];
-      for(var i in cur.location.display_address){
-        formatted_address.push(cur.location.display_address[i] + ' ');
+    }else if(this.state.current_venue !== null){ // Shown when API request is finished successfully
+
+      try{
+        var formatted_address = this.format_address(cur.location.display_address);
+      }catch(err){ // Sometimes venue doesn't supply an address
+        var formatted_address = '';
       }
-
-
       return(
         <div className="wrapper">
-          <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
+          <UserInputBox venueCaller={this.venue_caller} newVenue={this.change_current_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
+
           <div id='card'>
             <div id='card-text'>
               <h2 id='name'>{cur.name}</h2>
@@ -112,11 +109,12 @@ class Card extends React.Component{
               <h3 id='address'>{formatted_address}</h3>
               <h3 id='link-wrapper'><a id='link' href={cur.url} target='_blank' textDecoration='none'>Website</a></h3>
             </div>
-            <div id="image-div" style={{backgroundImage : 'url(' + cur.image_url + ')', backgroundSize: "100%"}}>
-
-            </div>
-
+            <div id="image-div" style={{backgroundImage : 'url(' + cur.image_url + ')', backgroundSize: "100%"}}></div>
           </div>
+
+
+
+
         </div>
       )
     }else{
@@ -125,7 +123,7 @@ class Card extends React.Component{
         <div className="wrapper">
           <h1 className="header">Invalid Location. A typo perhaps?</h1>
           <h2 className="subheader">Try again with a slightly different search term!</h2>
-          <UserInputBox venueCaller={this.venue_caller} newVenue={this.new_venue} setPrevLoc={this.set_previous_location}></UserInputBox>
+          <UserInputBox venueCaller={this.venue_caller} newVenue={this.change_current_venue} setPrevLoc={this.set_previous_location}></UserInputBox>
         </div>
       )
     }
