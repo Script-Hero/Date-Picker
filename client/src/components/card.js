@@ -89,13 +89,15 @@ class Card extends React.Component{
         </div>
       )
 
-    }else if(this.state.current_venue !== null){ // Shown when API request is finished successfully
-
+    }else if(this.state.current_venue !== null && cur !== undefined){ // Shown when API request is finished successfully
       try{
         var formatted_address = this.format_address(cur.location.display_address);
       }catch(err){ // Sometimes venue doesn't supply an address
         var formatted_address = '';
+        console.log(cur)
       }
+
+
       return(
         <div className="wrapper">
           <UserInputBox venueCaller={this.venue_caller} newVenue={this.change_current_venue} setPrevLoc={this.set_previous_location} prevLoc={this.state.previous_location}></UserInputBox>
@@ -121,8 +123,8 @@ class Card extends React.Component{
       return(
 
         <div className="wrapper">
-          <h1 className="header">Invalid Location. A typo perhaps?</h1>
-          <h2 className="subheader">Try again with a slightly different search term!</h2>
+          <h1 className="header">Whoops! Something went wrong!</h1>
+          <h2 className="subheader">Try again with a slightly different search term, or just hit "New Venue" and see what happens!</h2>
           <UserInputBox venueCaller={this.venue_caller} newVenue={this.change_current_venue} setPrevLoc={this.set_previous_location}></UserInputBox>
         </div>
       )
