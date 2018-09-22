@@ -9,6 +9,7 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "^16.5.0",
     "react-scripts": "1.1.5",
+    "request": "^2.88.0",
     "yelp-fusion": "^2.0.3"
   },
   "scripts": {

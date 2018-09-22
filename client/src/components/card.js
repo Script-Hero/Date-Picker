@@ -31,7 +31,7 @@ class Card extends React.Component{
       }else{
         var venue = pick_random(response);
         this.setState({current_venue : venue});
-      }
+        }
     }).catch(err => {
       console.log(err);
       this.setState({error : err})

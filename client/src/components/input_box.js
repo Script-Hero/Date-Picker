@@ -51,7 +51,7 @@ class UserInputBox extends React.Component{
       if(previous_location !== null){ // If a location was previously searched, then it will use that location when the textbox is empty
         var location = previous_location;
       }else{ // Otherwise, the Zip Code 77079 is the default location
-        var location = '77079';
+        var location = 'Houston, Texas 77079';
       }
     }else if(textbox_contents != ''){ // Textbox Contents are not empty
       var location = textbox_contents;
