@@ -1,10 +1,12 @@
+ html, body {margin:0;padding:0;height:100%;}
+
 *{
   text-align: center;
+  font-family: Roboto;
 }
 
 h6,h5,h4,h3,h2,h1, a{
   margin: 10px;
-  background:white;
 }
 
 #card{
@@ -12,56 +14,22 @@ h6,h5,h4,h3,h2,h1, a{
   height:500px;
   margin-left: auto;
   margin-right: auto;
-  border: 2px solid black;
   display: block;
-
   border-radius: 6px;
-
-  opacity: 1;
-  transition: opacity 200ms 0ms;
-
-}
-
-#card.hide{
-  transition: opacity 200ms 0ms;
-  opacity: 0.0
-}
-
-#card-text{
-  position: relative;
-  z-index: 10;
-  height: 250px;
-}
-
-#image{
-  display: none;
+  overflow: hidden;
+  border: 1px solid lightgrey;
 }
 
 #image-div{
   position:relative;
   display:block;
-  position: inline block;
-  height: 48%;
+  height:50%;
   border-radius: 4%;
 }
 
-#link{
-  font-size: 20px;
-  width: 100%;
-  background-color:white;
+#image-div{
+  box-shadow: 0px -1px 10px grey;
 }
-
-#link-wrapper{
-  width:97%;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  position:relative;
-  background-color:white;
-  margin-bottom: 10px;
-  border-radius: 6px;
-}
-
 
 #name{
   border-bottom: 2px solid grey;
@@ -72,5 +40,34 @@ h6,h5,h4,h3,h2,h1, a{
   margin: 30px;
   border-radius: 2px;
   box-shadow: none;
-  border: 1px solid grey;
+  border: 1px solid blue;
+  color:blue;
+  height: 100%;
+}
+
+#input-box::placeholder{
+  color:blue;
+  font-family: Roboto;
+  font-weight: 100;
+  font-size: 25px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#new-venue-btn{
+  background-color:white;
+  border: 1px solid blue;
+  color:blue;
+}
+
+#new-venue-btn:hover{
+  background-color:blue;
+  color:white;
+}
+
+#input-elements-wrapper{
+  vertical-align: middle;
+  height:100%;
+  position:relative;
+  overflow:hidden;
 }

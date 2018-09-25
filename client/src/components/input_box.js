@@ -2,7 +2,7 @@ import React from 'react';
 
 // Picks a random element from an array
 function pick_random(array){
-  return array[Math.round(Math.random() * array.length)]
+  return array[Math.floor(Math.random() * array.length)]
 }
 
 // Component for setting search location
@@ -24,7 +24,7 @@ class UserInputBox extends React.Component{
 
   // Enables enter key to be used to submit search
   handle_keypress(e){
-    if(e.key == 'Enter'){
+    if(e.key === 'Enter'){
       this.handle_submit();
     }
   }
@@ -47,14 +47,16 @@ class UserInputBox extends React.Component{
     var previous_location = this.props.prevLoc;
     var textbox_contents = this.state.text.trim();
 
-    if(textbox_contents == '' ){ // Checks if textbox is empty
+    var location;
+
+    if(textbox_contents === '' ){ // Checks if textbox is empty
       if(previous_location !== null){ // If a location was previously searched, then it will use that location when the textbox is empty
-        var location = previous_location;
+        location = previous_location;
       }else{ // Otherwise, the Zip Code 77079 is the default location
-        var location = 'Houston, Texas 77079';
+        location = 'Houston, Texas 77079';
       }
-    }else if(textbox_contents != ''){ // Textbox Contents are not empty
-      var location = textbox_contents;
+    }else if(textbox_contents !== ''){ // Textbox Contents are not empty
+      location = textbox_contents;
       this.set_previous_location(location);
     }
 
@@ -64,7 +66,7 @@ class UserInputBox extends React.Component{
   render(){
     return(
       <div id='user-input-box'>
-        <h2>
+        <h2 id='input-elements-wrapper'>
           <input id='input-box' name='location' type='text' placeholder='Zip Code or Address' value={this.state.text} onChange={this.handle_change} onKeyPress={this.handle_keypress}></input>
           <button id='new-venue-btn'onClick={this.handle_submit} className='btn btn-lg btn-primary'>New Venue</button>
         </h2>
