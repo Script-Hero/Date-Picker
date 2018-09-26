@@ -1,26 +1,24 @@
- html, body {height:100%;}
+ html, body {margin:0;padding:0;height:100%;}
 
 *{
   text-align: center;
   font-family: Roboto;
 }
 
-/* Used for correct spacing between lines of text */
 h6,h5,h4,h3,h2,h1, a{
   margin: 10px;
 }
 
-/* Shadow effect on edges of the screen so the site doesn't look boring and blank */
 body{
+  margin-top: 0;
   box-shadow: inset 5px 5px 50px rgb(79, 79, 79);
-  border: 1px solid black; /* Don't know why but the shadow doesn't work correctly without this */
+  top: 0;
+  left: 0;
 }
-
-/* Card & Card Element styling */
 
 #card{
   width:30%;
-  height:80vh;
+  height:500px;
   margin-left: auto;
   margin-right: auto;
   display: block;
@@ -35,9 +33,11 @@ body{
   display:block;
   height:50%;
   border-radius: 4%;
-  box-shadow: 0px -1px 10px grey;
 }
 
+#image-div{
+  box-shadow: 0px -1px 10px grey;
+}
 
 #name{
   border-bottom: 2px solid grey;
@@ -45,18 +45,19 @@ body{
   box-shadow: 0px 1px 3px grey;
 }
 
-/* User-Input area styling */
 #input-box{
-  margin: 2vh;
+  margin: 30px;
   border-radius: 2px;
   box-shadow: none;
   border: 1px solid blue;
-  color: blue;
+  color:blue;
+  height: 100%;
 }
 
 #input-box::placeholder{
   color:blue;
-  font-size: 4vh;
+  font-family: Roboto;
+  font-size: 25px;
   text-align: center;
   vertical-align: middle;
 }
@@ -74,16 +75,12 @@ body{
 
 #input-elements-wrapper{
   vertical-align: middle;
+  height:100%;
   position:relative;
   overflow:hidden;
 }
 
-/* "Loading..." text that is shown during API requests */
 #loading{
-  font-size: 10vh;
-}
-#loading-div{
-  position: relative;
-  display:block;
-  margin-top: 30vh;
+  text-align: center;
+  vertical-align: middle;
 }

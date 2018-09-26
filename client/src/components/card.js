@@ -19,9 +19,7 @@ class Card extends React.Component{
 
   set_color(){
     var colors = ["#bae1ff", "#baffc9", "#ffffba", "#ffdfba", "#ffb3ba"];
-    var color = pick_random(colors);
-    console.log(color)
-    return color;
+    return pick_random(colors);
   }
 
   set_previous_location(location){
@@ -97,8 +95,10 @@ class Card extends React.Component{
 
     }else if(this.state.current_venue === null){ // Shown before API request is finished
       return(
-        <div className="wrapper">
-          <h1 className='header'>Loading...</h1>
+        <div className="wrapper" id='loading-wrapper'>
+          <div id="loading-div">
+            <h1 className='header' id='loading'>Loading...</h1>
+          </div>
         </div>
       )
 
@@ -119,7 +119,7 @@ class Card extends React.Component{
               <h3 id='link-wrapper'><a id='link' href={cur.url} target='_blank' textDecoration='none'>Website</a></h3>
             </div>
             <div id="image-div" style={{backgroundImage : 'url(' + cur.image_url + ')', backgroundSize: "100%"}}></div>
-          </div>  
+          </div>
           <div id="card-shadow"></div>
         </div>
       )
